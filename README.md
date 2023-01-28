@@ -24,3 +24,45 @@ Temat projektu: *Baza danych przedsiębiorstwa komunikacji miejskiej. Baza powin
 * opis wyzwalaczy,
 * skrypt tworzący bazę danych,
 * typowe zapytania.
+
+--------------------------------------
+
+## Tabele (10/19)
+* ~~Osoby,~~
+* ~~Stanowiska,~~
+* ~~Pracownicy,~~
+* ~~Kierowcy,~~
+* ~~Kontrolerzy,~~
+* ~~Strefy,~~
+* ~~Bilety,~~
+* ~~Progresja kar,~~
+* ~~Przewinienia,~~
+* ~~Nałożone kary,~~
+* Linie,
+* Trasy,
+* Czasy przejazdu,
+* Kursy,
+* Wykonane kursy,
+* Autobusy,
+* Modele autobusów,
+* Koszty eksploatacji,
+* Usługi
+
+## Funkcje (1/5)
+* ~~Kwota kary,~~
+* Rozkład jazdy dla danego przystanku i dnia,
+* Rozkład jazdy dla całego kursu,
+* Harmonogram pracy kierowcy,
+* Harmonogram jazdy autobusu
+
+## Widoki (0/5)
+
+* Autobusy niskoemisyjne,
+* Autobusy spalinowe,
+* Auotbusy dostosowane do osób niepełnosprawnych,
+* Przedawnione kary,
+* Kierowcy do wysłania na badania lub prawo jazdy
+
+## Procedury
+
+## Wyzwalacze
