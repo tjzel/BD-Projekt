@@ -5,6 +5,7 @@ CREATE TABLE Kierowcy(
   DataWażnościPrawaJazdy DATE NOT NULL,
   DataWażnościBadańLekarskich DATE NOT NULL,
 
-  PRIMARY KEY (PracownikID) REFERENCES Pracownicy(PracownikID)
+  PRIMARY KEY (PracownikID),
+  FOREIGN KEY (PracownikID) REFERENCES Pracownicy(PracownikID)
 );
 GO

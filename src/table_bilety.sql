@@ -10,6 +10,6 @@ CREATE TABLE Bilety(
   CenaUlgMsc MONEY NOT NULL
 
   PRIMARY KEY(StrefaID),
-  FOREIGN KEY(StrefaID) REFERENCES Stefy(StefaID)
+  FOREIGN KEY(StrefaID) REFERENCES Strefy(StrefaID)
 );
 GO

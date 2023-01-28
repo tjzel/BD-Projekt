@@ -1,4 +1,6 @@
 CREATE TABLE Strefy(
-  StrefaID INT IDENTITY(1, 1)
+  StrefaID INT IDENTITY(1, 1),
+  
+  PRIMARY KEY (StefaID)
 );
 GO

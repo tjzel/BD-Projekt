@@ -9,7 +9,7 @@ CREATE TABLE Pracownicy(
   StawkaGodzinowa MONEY NOT NULL,
   WymiarEtatu DECIMAL
 
-  PRIMARY KEY(OsobaID, PracownikID),
+  PRIMARY KEY(OsobaID),
   FOREIGN KEY(OsobaID) REFERENCES Osoby(OsobaID),
   FOREIGN KEY(Stanowisko) REFERENCES Stanowiska(NazwaStanowiska)
 );

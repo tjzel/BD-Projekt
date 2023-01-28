@@ -3,6 +3,6 @@ CREATE TABLE Kontrolerzy(
   KontrolerID INT IDENTITY(1, 1),
 
   PRIMARY KEY(PracownikID, KontrolerID),
-  FOREIGN KEY PracownikID REFERENCES Pracownicy(PracownikID)
+  FOREIGN KEY (PracownikID) REFERENCES Pracownicy(PracownikID)
 );
 GO

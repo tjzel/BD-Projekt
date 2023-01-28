@@ -3,6 +3,6 @@ CREATE TABLE Przewinienia(
   PrzewinienieRodzaj NVARCHAR(256) UNIQUE NOT NULL,
   AktualnaKwotaKary MONEY NOT NULL,
 
-  PRIMARY KEY(PrzewinienieID, PrzewinienieRodzaj)
+  PRIMARY KEY(PrzewinienieID)
 );
 GO
