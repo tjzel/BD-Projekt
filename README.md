@@ -5,9 +5,9 @@ Tutaj jeszcze nic nie ma, ale coś powstanie.
 Temat projektu: *Baza danych przedsiębiorstwa komunikacji miejskiej. Baza powinna przechowywać informacje o kierowcach, liniach (jakie są przystanki), autobusach oraz rozkładzie jazdy.*
 
 ## Wymagania dotyczące bazy
-* Min. 16 zaprojektowanych tabel,
-* zawieranie danych dotyczących atrybutów zmieniających się w czasie,
-* zawieranie tabel realizujących jeden ze schematów dziedziczenia,
+* ~~Min. 16 zaprojektowanych tabel,~~
+* ~~zawieranie danych dotyczących atrybutów zmieniających się w czasie,~~
+* ~~zawieranie tabel realizujących jeden ze schematów dziedziczenia,~~
 * min. 10 widoków lub funkcji,
 * oprogramowanie z wykorzystaniem procedur składowanych i wyzwalaczy (min. po 5 procedur i po 5 wyzwalaczy),
 * projekt strategii pielęgnacji bazy danych (kopie zapasowe),

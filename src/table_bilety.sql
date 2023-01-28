@@ -11,4 +11,5 @@ CREATE TABLE Bilety(
 
   PRIMARY KEY(StrefaID),
   FOREIGN KEY(StrefaID) REFERENCES Stefy(StefaID)
-)
+);
+GO

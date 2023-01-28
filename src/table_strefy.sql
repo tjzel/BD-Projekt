@@ -1,1 +1,4 @@
-dupa
+CREATE TABLE Strefy(
+  StrefaID INT IDENTITY(1, 1)
+);
+GO

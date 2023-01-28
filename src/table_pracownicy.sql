@@ -12,4 +12,5 @@ CREATE TABLE Pracownicy(
   PRIMARY KEY(OsobaID, PracownikID),
   FOREIGN KEY(OsobaID) REFERENCES Osoby(OsobaID),
   FOREIGN KEY(Stanowisko) REFERENCES Stanowiska(NazwaStanowiska)
-)
+);
+GO

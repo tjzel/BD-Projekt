@@ -10,4 +10,5 @@ CREATE TABLE NałożoneKary(
   PRIMARY KEY (KaraID),
   FOREIGN KEY (KontrolerID) REFERENCES Kontrolerzy(KontrolerID),
   FOREIGN KEY (PrzewinienieID) REFERENCES Przewinienia(PrzewinienieID)
-)
+);
+GO

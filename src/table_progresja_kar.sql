@@ -1,5 +1,6 @@
 CREATE TABLE ProgesjaKar(
   LiczbaPrzewinień INT UNIQUE NOT NULL,
-  Stawka MONEY NOT NULL,
+  Modyfikator DECIMAL NOT NULL,
   PRIMARY KEY (LiczbaPrzewinień)
-)
+);
+GO

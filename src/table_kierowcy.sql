@@ -6,4 +6,5 @@ CREATE TABLE Kierowcy(
   DataWażnościBadańLekarskich DATE NOT NULL,
 
   PRIMARY KEY (PracownikID) REFERENCES Pracownicy(PracownikID)
-)
+);
+GO

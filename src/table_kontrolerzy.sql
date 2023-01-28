@@ -4,4 +4,5 @@ CREATE TABLE Kontrolerzy(
 
   PRIMARY KEY(PracownikID, KontrolerID),
   FOREIGN KEY PracownikID REFERENCES Pracownicy(PracownikID)
-)
+);
+GO
