@@ -5,9 +5,9 @@ Tutaj jeszcze nic nie ma, ale coś powstanie.
 Temat projektu: *Baza danych przedsiębiorstwa komunikacji miejskiej. Baza powinna przechowywać informacje o kierowcach, liniach (jakie są przystanki), autobusach oraz rozkładzie jazdy.*
 
 ## Wymagania dotyczące bazy
-* ~~Min. 16 zaprojektowanych tabel,~~
-* ~~zawieranie danych dotyczących atrybutów zmieniających się w czasie,~~
-* ~~zawieranie tabel realizujących jeden ze schematów dziedziczenia,~~
+* Min. 16 zaprojektowanych tabel,
+* zawieranie danych dotyczących atrybutów zmieniających się w czasie,
+* zawieranie tabel realizujących jeden ze schematów dziedziczenia,
 * min. 10 widoków lub funkcji,
 * oprogramowanie z wykorzystaniem procedur składowanych i wyzwalaczy (min. po 5 procedur i po 5 wyzwalaczy),
 * projekt strategii pielęgnacji bazy danych (kopie zapasowe),
@@ -27,41 +27,25 @@ Temat projektu: *Baza danych przedsiębiorstwa komunikacji miejskiej. Baza powin
 
 --------------------------------------
 
-## Tabele (10/19)
-* ~~Osoby,~~
-* ~~Stanowiska,~~
-* ~~Pracownicy,~~
-* ~~Kierowcy,~~
-* ~~Kontrolerzy,~~
-* ~~Strefy,~~
-* ~~Bilety,~~
-* ~~Progresja kar,~~
-* ~~Przewinienia,~~
-* ~~Nałożone kary,~~
-* Linie,
-* Trasy,
-* Czasy przejazdu,
-* Kursy,
-* Wykonane kursy,
-* Autobusy,
-* Modele autobusów,
-* Koszty eksploatacji,
-* Usługi
+## Tabele (10)
+* Osoby,
+* Stanowiska,
+* Pracownicy,
+* Kierowcy,
+* Kontrolerzy,
+* Strefy,
+* Bilety,
+* Progresja kar,
+* Przewinienia,
+* Nałożone kary,
 
-## Funkcje (1/5)
-* ~~Kwota kary,~~
-* Rozkład jazdy dla danego przystanku i dnia,
-* Rozkład jazdy dla całego kursu,
-* Harmonogram pracy kierowcy,
-* Harmonogram jazdy autobusu
+## Funkcje (1)
+* Kwota kary,
 
-## Widoki (0/5)
-
-* Autobusy niskoemisyjne,
-* Autobusy spalinowe,
-* Auotbusy dostosowane do osób niepełnosprawnych,
+## Widoki (3)
 * Przedawnione kary,
-* Kierowcy do wysłania na badania lub prawo jazdy
+* Kierowcy do wysłania na badania,
+* Miesięczny ranking kontrolerów
 
 ## Procedury
 
