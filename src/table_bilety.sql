@@ -1,0 +1,15 @@
+CREATE TABLE Bilety(
+  StrefaID INT NOT NULL,
+  CenaNor20min MONEY NOT NULL,
+  CenaUlg20min MONEY NOT NULL,
+  CenaNor60min MONEY NOT NULL,
+  CenaUlg60min MONEY NOT NULL,
+  CenaNor24h MONEY NOT NULL,
+  CenaUlg24h MONEY NOT NULL,
+  CenaNorMsc MONEY NOT NULL,
+  CenaUlgMsc MONEY NOT NULL
+
+  PRIMARY KEY(StrefaID),
+  FOREIGN KEY(StrefaID) REFERENCES Strefy(StrefaID)
+);
+GO
