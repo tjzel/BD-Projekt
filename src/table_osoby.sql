@@ -1,0 +1,9 @@
+CREATE TABLE Osoby (
+  OsobaID INT IDENTITY(1, 1),
+  Imię NVARCHAR(256) NOT NULL,
+  Nazwisko NVARCHAR(256) NOT NULL,
+  PESEL NVARCHAR(9),
+  NrDowoduOsobistego NVARCHAR(9),
+  PRIMARY KEY (OsobaID)
+)
+GO
