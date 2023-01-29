@@ -37,16 +37,24 @@ Temat projektu: *Baza danych przedsiębiorstwa komunikacji miejskiej. Baza powin
 * Bilety,
 * Progresja kar,
 * Przewinienia,
-* Nałożone kary,
+* Nałożone kary
 
-## Funkcje (1)
+## Funkcje (2)
 * Kwota kary,
+* Pracownicy na stanoiwsku
 
 ## Widoki (3)
 * Przedawnione kary,
 * Kierowcy do wysłania na badania,
 * Miesięczny ranking kontrolerów
 
-## Procedury
+## Procedury (4)
+* Opłacenie mandatu,
+* Wystawienie mandatu,
+* Aktualizacja mandatów,
+* Zmiana kwot kar
 
-## Wyzwalacze
+## Wyzwalacze (3)
+* Osoby INSERT,
+* Osoby UPDATE,
+* NałożoneKary ALL
