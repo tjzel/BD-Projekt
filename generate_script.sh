@@ -15,3 +15,7 @@ cat src/function_kwota_kary.sql >> start_database.sql
 cat src/view_kierowcy_badania.sql >> start_database.sql
 cat src/view_przedawnione_kary.sql >> start_database.sql
 cat src/view_ranking_kontrolerow.sql >> start_database.sql
+cat src/procedure_wystaw_mandat.sql >> start_database.sql
+cat src/procedure_oplacenie_mandatu.sql >> start_database.sql
+cat src/trigger_table_osoby_insert.sql >> start_database.sql
+cat src/trigger_table_osoby_update.sql >> start_database.sql

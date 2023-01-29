@@ -73,6 +73,9 @@ AS
     IF @errorFlag = 1
       RETURN
 
-  SET @kwota = SELECT FROM KwotaKary(@ukaranyID, @przewinienieID)
+  SET @kwota = (SELECT * FROM KwotaKary(@daneOsobaID, @przewinienieID))
+  
+  INSERT INTO NałożoneKary(KontrolerID, PrzewinienieID, UkaranyID, DataUkarania, KwotaKary, DataOpłacenia)
+  VALUES(@kontrolerID, @przewinienieID, @daneOsobaID, GETDATE(), @kwota, NULL)
 
 GO
