@@ -100,6 +100,123 @@ CREATE TABLE NałożoneKary(
   FOREIGN KEY (PrzewinienieID) REFERENCES Przewinienia(PrzewinienieID)
 );
 GO
+CREATE TABLE Linie(
+    LiniaID INT,
+    NazwaLinii NVARCHAR NOT NULL,
+    Nocna BIT,
+    Przyspieszona BIT
+
+    PRIMARY KEY(LiniaID)
+);
+GO
+CREATE TABLE ModeleAutobusów(
+    ModelID INT,
+    Producent NVARCHAR NOT NULL,
+    NazwaModelu NVARCHAR NOT NULL,
+    MiejscaSiedzące INT NOT NULL,
+    MiejscaStojące INT NOT NULL,
+    MiejscaNaRowery INT,
+    MiejscaNaWózki INT,
+    Niskopodłogowy BIT,
+    Przegubowy BIT,
+    Napęd NVARCHAR
+
+
+    PRIMARY KEY(ModelID),
+);
+GO
+CREATE TABLE Autobusy(
+    AutobusID INT,
+    NumerRejestracyjny NVARCHAR NOT NULL UNIQUE,
+    ModelID INT NOT NULL,
+    RokProdukcji INT NOT NULL,
+    DataRozpEksploatacji DATE,
+    DataWaznosciPrzegladu DATE NOT NULL,
+    AutomatyBiletowe TINYINT
+
+    PRIMARY KEY(AutobusID),
+    FOREIGN KEY(ModelID) REFERENCES ModeleAutobusów(ModelID)
+);
+GO
+CREATE TABLE Przystanki(
+    PrzystanekID NVARCHAR(4),
+    NazwaPrzystanku NVARCHAR NOT NULL,
+    IlośćWiat TINYINT NOT NULL,
+    NaŻądanie BIT,
+    ElektronicznaInformacja BIT,
+    AutomatBiletowy BIT,
+    Strefa INT
+
+    PRIMARY KEY(PrzystanekID),
+    FOREIGN KEY(Strefa) REFERENCES Strefy(StrefaID) 
+);
+GO
+CREATE TABLE Trasy(
+    TrasaID INT,
+    LiniaID INT NOT NULL,
+    PrzystanekPoczątkowy NVARCHAR(4) NOT NULL
+
+    PRIMARY KEY(TrasaID),
+    FOREIGN KEY(LiniaID) REFERENCES Linie(LiniaID),
+    FOREIGN KEY(PrzystanekPoczątkowy) REFERENCES Przystanki(PrzystanekID) 
+);
+GO
+CREATE TABLE Kursy(
+    KursID INT,
+    TrasaID INT NOT NULL,
+    GodzinaOdjazdu TIME NOT NULL,
+    DniPowszednie BIT NOT NULL,
+    Soboty BIT NOT NULL,
+    Niedziele BIT NOT NULL,
+    AutobusID INT,
+    PracownikID INT
+
+    PRIMARY KEY(KursID),
+    FOREIGN KEY(TrasaID) REFERENCES Trasy(TrasaID),
+    FOREIGN KEY(AutobusID) REFERENCES Autobusy(AutobusID),
+    FOREIGN KEY (PracownikID) REFERENCES Kierowcy(PracownikID) 
+);
+GO
+CREATE TABLE CzasyPrzejazdu(
+    TrasaID INT,
+    KolejnośćPrzystanku INT NOT NULL,
+    PrzystanekID NVARCHAR(4) NOT NULL,
+    CzasPrzejZPoczątku TIME NOT NULL
+
+    PRIMARY KEY(TrasaID,KolejnośćPrzystanku),
+    FOREIGN KEY(PrzystanekID) REFERENCES Przystanki(PrzystanekID),
+    FOREIGN KEY(TrasaID) REFERENCES Trasy(TrasaID) 
+);
+GO
+CREATE TABLE Usługi(
+    NazwaUsługi NVARCHAR
+
+    PRIMARY KEY(NazwaUsługi) 
+);
+GO
+CREATE TABLE KosztyEksploatacji(
+    AutobusID INT,
+    DataWykonania DATE,
+    NazwaUsługi NVARCHAR NOT NULL,
+    Kwota MONEY NOT NULL
+
+    PRIMARY KEY(AutobusID,DataWykonania),
+    FOREIGN KEY(AutobusID) REFERENCES Autobusy(AutobusID),
+    FOREIGN KEY(NazwaUsługi) REFERENCES Usługi(NazwaUsługi) 
+);
+GO
+CREATE TABLE WykonaneKursy(
+    KursID INT,
+    DataKursu DATE NOT NULL,
+    PracownikID INT NOT NULL,
+    AutobusID INT NOT NULL
+
+    PRIMARY KEY(KursID,DataKursu),
+    FOREIGN KEY(KursID) REFERENCES Kursy(KursID),
+    FOREIGN KEY(PracownikID) REFERENCES Kierowcy(PracownikID),
+    FOREIGN KEY(AutobusID) REFERENCES Autobusy(AutobusID) 
+);
+GO
 CREATE VIEW KierowcyBadania
 AS
 SELECT P.PracownikID, O.Imię, O.Nazwisko, T.UpływająBadaniaZPrawaJazdy, T.UpływająBadaniaLekarskie
@@ -151,6 +268,118 @@ JOIN Pracownicy P
 ON P.PracownikID = K.PracownikID
 JOIN Osoby O
 ON O.OsobaID = P.OsobaID
+GO
+CREATE FUNCTION ADDTIME (@StartTime TIME,@Offset TIME)
+RETURNS TIME
+AS
+BEGIN
+	SET @StartTime = DATEADD (hour, DATEPART(hh,@Offset),@StartTime)
+	SET @StartTime = DATEADD (n, DATEPART(n,@Offset),@StartTime)
+
+    RETURN @StartTime
+END
+GO
+CREATE FUNCTION RozkładJazdyDlaPrzystanku ( @PrzystanekID INT,@DzienTyg INT)
+RETURNS @RozkladTab TABLE(NazwaLinii NVARCHAR, KursID INT, Godzina Time)
+AS
+BEGIN
+    INSERT INTO @RozkladTab
+        SELECT T.LiniaID, K.KursID, dbo.ADDTIME(K.GodzinaOdjazdu,C.CzasPrzejZPoczątku) Godzina
+        FROM Przystanki P JOIN CzasyPrzejazdu C
+        ON P.PrzystanekID=C.PrzystanekID
+        JOIN Trasy T ON C.TrasaID=T.TrasaID 
+        JOIN Kursy K ON T.TrasaID=K.TrasaID
+        WHERE P.PrzystanekID=@PrzystanekID AND 
+        ((K.Soboty=1 AND @DzienTyg=6) OR
+        (K.Niedziele=1 AND @DzienTyg=7) OR
+        (K.DniPowszednie=1 AND @DzienTyg NOT IN(6,7)))
+    
+    INSERT INTO @RozkladTab
+        SELECT T.LiniaID, K.KursID, K.GodzinaOdjazdu Godzina
+        FROM Przystanki P JOIN Trasy T
+        ON P.PrzystanekID=T.PrzystanekPoczątkowy
+        JOIN Kursy K ON K.TrasaID=T.TrasaID
+        WHERE P.PrzystanekID=@PrzystanekID AND 
+        ((K.Soboty=1 AND @DzienTyg=6) OR
+        (K.Niedziele=1 AND @DzienTyg=7) OR
+        (K.DniPowszednie=1 AND @DzienTyg NOT IN(6,7))) 
+    RETURN
+END
+GO
+CREATE FUNCTION RozkładJazdyDlaKursu ( @KursID INT)
+RETURNS @RozkladTab TABLE(PrzystanekID NVARCHAR, Godzina Time)
+AS
+BEGIN
+    INSERT INTO @RozkladTab
+        SELECT P.PrzystanekID, dbo.ADDTIME(K.GodzinaOdjazdu,C.CzasPrzejZPoczątku)
+        FROM Przystanki P JOIN CzasyPrzejazdu C
+        ON P.PrzystanekID=C.PrzystanekID
+        JOIN Trasy T ON C.TrasaID=T.TrasaID 
+        JOIN Kursy K ON T.TrasaID=K.TrasaID
+        WHERE K.KursID=@KursID
+    
+    INSERT INTO @RozkladTab
+        SELECT P.PrzystanekID, K.GodzinaOdjazdu Godzina
+        FROM Przystanki P JOIN Trasy T
+        ON P.PrzystanekID=T.PrzystanekPoczątkowy
+        JOIN Kursy K ON K.TrasaID=T.TrasaID
+        WHERE K.KursID=@KursID
+    RETURN
+END
+GO
+CREATE VIEW CzasyTrwaniaKursów
+AS
+    SELECT K.KursID,K.GodzinaOdjazdu,T.PrzystanekPoczątkowy PrzystanekOdjazdu,
+    dbo.ADDTIME(S.Czas,GodzinaOdjazdu) GodzinaPrzyjazdu, C.PrzystanekID PrzystanekPrzyjazdu,
+    K.DniPowszednie,K.Soboty,K.Niedziele,K.PracownikID,K.AutobusID
+    FROM (SELECT Cz.TrasaID,
+        MAX(CzasPrzejZPoczątku) Czas 
+        FROM CzasyPrzejazdu Cz
+        GROUP BY(Cz.TrasaID)) S 
+    JOIN CzasyPrzejazdu C ON S.Czas=C.CzasPrzejZPoczątku AND S.TrasaID=C.TrasaID
+    JOIN Kursy K ON C.TrasaID=K.TrasaID JOIN Trasy T ON K.TrasaID=T.TrasaID
+GO
+CREATE FUNCTION HarmonogramJazdyAutobusu(@AutobusID INT,@DzienTyg INT)
+RETURNS @KursyAutobusu TABLE
+(
+    GodzinaOdjazdu TIME,
+    PrzystanekOdjazdu NVARCHAR,
+    GodzinaPrzyjazdu TIME,
+    PrzystanekPrzyjazdu NVARCHAR
+)
+AS
+    BEGIN
+        INSERT INTO @KursyAutobusu
+            SELECT GodzinaOdjazdu,PrzystanekOdjazdu,
+            GodzinaPrzyjazdu,PrzystanekPrzyjazdu
+            FROM CzasyTrwaniaKursów
+            WHERE AutobusID=@AutobusID AND
+            ((Soboty=1 AND @DzienTyg=6) OR 
+            (Niedziele=1 AND @DzienTyg=7) OR
+            (DniPowszednie=1 AND @DzienTyg NOT IN(6,7)))
+        RETURN
+    END
+GO
+CREATE FUNCTION HarmonogramPracyKierowcy(@PracownikID INT,@DzienTyg INT)
+RETURNS @KursyKierowcy TABLE
+(
+    GodzinaOdjazdu TIME,
+    PrzystanekOdjazdu NVARCHAR,
+    GodzinaPrzyjazdu TIME,
+    PrzystanekPrzyjazdu NVARCHAR
+)
+AS
+    BEGIN
+        INSERT INTO @KursyKierowcy
+            SELECT GodzinaOdjazdu,PrzystanekOdjazdu,
+            GodzinaPrzyjazdu,PrzystanekPrzyjazdu
+            FROM CzasyTrwaniaKursów
+            WHERE PracownikID=@PracownikID AND
+            ((Soboty=1 AND @DzienTyg=6) OR 
+            (Niedziele=1 AND @DzienTyg=7) OR
+            (DniPowszednie=1 AND @DzienTyg NOT IN(6,7)))
+        RETURN
+    END
 GO
 CREATE TRIGGER OsobyINSERT
 ON Osoby

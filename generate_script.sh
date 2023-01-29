@@ -12,11 +12,6 @@ cat src/table_bilety.sql >> start_database.sql
 cat src/table_przewinienia.sql >> start_database.sql
 cat src/table_progresja_kar.sql >> start_database.sql
 cat src/table_nalozone_kary.sql >> start_database.sql
-###
-cat src/view_kierowcy_badania.sql >> start_database.sql
-cat src/view_przedawnione_kary.sql >> start_database.sql
-cat src/view_ranking_kontrolerow.sql >> start_database.sql
-
 cat src/table_linie.sql >> start_database.sql
 cat src/table_modele_autobusow.sql >> start_database.sql
 cat src/table_autobusy.sql >> start_database.sql
@@ -27,6 +22,10 @@ cat src/table_czasy_przejazdu.sql >> start_database.sql
 cat src/table_uslugi.sql >> start_database.sql
 cat src/table_koszty_eksploatacji.sql >> start_database.sql
 cat src/table_wykonane_kursy.sql >> start_database.sql
+###
+cat src/view_kierowcy_badania.sql >> start_database.sql
+cat src/view_przedawnione_kary.sql >> start_database.sql
+cat src/view_ranking_kontrolerow.sql >> start_database.sql
 cat src/function_addtime.sql >> start_database.sql
 cat src/function_rozklad_jazdy_dla_przystanku.sql >> start_database.sql
 cat src/function_rozklad_jazdy_dla_kursu.sql >> start_database.sql
