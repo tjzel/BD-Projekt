@@ -100,33 +100,7 @@ CREATE TABLE NałożoneKary(
   FOREIGN KEY (PrzewinienieID) REFERENCES Przewinienia(PrzewinienieID)
 );
 GO
-CREATE FUNCTION KwotaKary(
-  @ukaranyID INT,
-  @przewinienieID INT
-) RETURNS MONEY 
-AS
-BEGIN
-  DECLARE @dzisiaj DATE = GETDATE();
-  DECLARE @modyfikator DECIMAL = (
-    SELECT TOP 1 PK.Modyfikator
-    FROM ProgresjaKar PK
-    WHERE PK.LiczbaPrzewinień >= (
-      SELECT COUNT(NK.UkaranyID) LiczbaPrzewinień
-      FROM NałożoneKary AS NK
-      WHERE NK.UkaranyID = @ukaranyID AND DATEDIFF(DAY, @dzisiaj, NK.DataUkarania) < 365
-    )
-    ORDER BY PK.LiczbaPrzewinień ASC
-  )
-  DECLARE @kwotaBazowa MONEY = (
-    SELECT P.AktualnaKwotaKary
-    FROM Przewinienia P
-    WHERE @przewinienieID = P.PrzewinienieID
-  )
-  DECLARE @wynik MONEY = @kwotaBazowa * @modyfikator;
-  RETURN @wynik;
-END;
-GO
-  CREATE VIEW KierowcyBadania
+CREATE VIEW KierowcyBadania
 AS
 SELECT P.PracownikID, O.Imię, O.Nazwisko, T.UpływająBadaniaZPrawaJazdy, T.UpływająBadaniaLekarskie
 FROM (
@@ -177,6 +151,88 @@ JOIN Pracownicy P
 ON P.PracownikID = K.PracownikID
 JOIN Osoby O
 ON O.OsobaID = P.OsobaID
+GO
+CREATE TRIGGER OsobyINSERT
+ON Osoby
+AFTER INSERT
+AS
+  IF EXISTS(
+    SELECT * FROM inserted
+    WHERE PESEL IS NOT NULL AND PESEL NOT LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' OR
+      NrDowoduOsobistego IS NOT NULL AND NrDowoduOsobistego NOT LIKE '[A-Z][A-Z][A-Z][0-9][0-9][0-9][0-9][0-9][0-9]')
+    RAISERROR('Niepoprawne dane!', 0, 1)
+
+  INSERT INTO Osoby
+  SELECT Imię, Nazwisko, PESEL, NrDowoduOsobistego FROM inserted
+  WHERE (PESEL IS NULL OR PESEL LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]') AND
+      (NrDowoduOsobistego IS NULL OR NrDowoduOsobistego LIKE '[A-Z][A-Z][A-Z][0-9][0-9][0-9][0-9][0-9][0-9]')
+GO
+CREATE TRIGGER OsobyUPDATE
+ON Osoby
+AFTER UPDATE
+AS
+  IF EXISTS(
+    SELECT * FROM inserted
+    WHERE PESEL IS NOT NULL AND PESEL NOT LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' OR
+      NrDowoduOsobistego IS NOT NULL AND NrDowoduOsobistego NOT LIKE '[A-Z][A-Z][A-Z][0-9][0-9][0-9][0-9][0-9][0-9]')
+    RAISERROR('Niepoprawne dane!', 0, 1)
+
+  UPDATE 
+    Osoby
+  SET 
+    Imię = I.Imię,
+    Nazwisko = I.Nazwisko,
+    PESEL = I.PESEL,
+    NrDowoduOsobistego = I.NrDowoduOsobistego
+  FROM
+    Osoby O
+  INNER JOIN inserted I
+  ON O.OsobaID = I.OsobaID
+  WHERE (I.PESEL IS NULL OR I.PESEL LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]') AND
+      (I.NrDowoduOsobistego IS NULL OR I.NrDowoduOsobistego LIKE '[A-Z][A-Z][A-Z][0-9][0-9][0-9][0-9][0-9][0-9]') AND
+      O.OsobaID = I.OsobaID
+GO
+CREATE TRIGGER NałożoneKaryALL
+ON NałożoneKary
+AFTER INSERT, UPDATE, DELETE
+AS
+  RAISERROR('Zakaz manualnej ingerencji w mandaty!', 0, 1)
+GO
+CREATE FUNCTION KwotaKary(
+  @ukaranyID INT,
+  @przewinienieID INT
+) RETURNS MONEY 
+AS
+BEGIN
+  DECLARE @dzisiaj DATE = GETDATE();
+  DECLARE @modyfikator DECIMAL = (
+    SELECT TOP 1 PK.Modyfikator
+    FROM ProgresjaKar PK
+    WHERE PK.LiczbaPrzewinień >= (
+      SELECT COUNT(NK.UkaranyID) LiczbaPrzewinień
+      FROM NałożoneKary AS NK
+      WHERE NK.UkaranyID = @ukaranyID AND DATEDIFF(DAY, @dzisiaj, NK.DataUkarania) < 365
+    )
+    ORDER BY PK.LiczbaPrzewinień ASC
+  )
+  DECLARE @kwotaBazowa MONEY = (
+    SELECT P.AktualnaKwotaKary
+    FROM Przewinienia P
+    WHERE @przewinienieID = P.PrzewinienieID
+  )
+  DECLARE @wynik MONEY = @kwotaBazowa * @modyfikator;
+  RETURN @wynik;
+END;
+GO
+  CREATE FUNCTION PracownicyNaStanowisku(@stanowisko NVARCHAR(256))
+RETURNS TABLE
+AS
+  RETURN(
+    SELECT P.PracownikID, O.Imię, O.Nazwisko
+    FROM Pracownicy P
+    JOIN Osoby O
+    ON P.OsobaID = P.OsobaID
+    WHERE P.Stanowisko = @stanowisko)
 GO
 CREATE PROCEDURE WystawMandat(
   @kontrolerID INT,
@@ -255,8 +311,10 @@ AS
 
   SET @kwota = (SELECT * FROM KwotaKary(@daneOsobaID, @przewinienieID))
   
+  ALTER TABLE NałożoneKary DISABLE TRIGGER NałożoneKaryALL
   INSERT INTO NałożoneKary(KontrolerID, PrzewinienieID, UkaranyID, DataUkarania, KwotaKary, DataOpłacenia)
   VALUES(@kontrolerID, @przewinienieID, @daneOsobaID, GETDATE(), @kwota, NULL)
+  ALTER TABLE NałożoneKary ENABLE TRIGGER NałożoneKaryALL
 
 GO
 CREATE PROCEDURE OpłacenieMandatu(
@@ -275,47 +333,26 @@ AS
   IF @reszta < 0
     RAISERROR('Za mała kwota do opłacenia mandatu!', 0, 1)
     RETURN
+  ALTER TABLE NałożoneKary DISABLE TRIGGER NałożoneKaryALL
   UPDATE NałożoneKary
     SET DataOpłacenia = GETDATE()
     WHERE @mandatID = KaraID
+  ALTER TABLE NałożoneKary ENABLE TRIGGER NałożoneKaryALL
 GO
-CREATE TRIGGER OsobyINSERT
-ON Osoby
-AFTER INSERT
+CREATE PROCEDURE AktualizacjaMandatów
 AS
-  IF EXISTS(
-    SELECT * FROM inserted
-    WHERE PESEL IS NOT NULL AND PESEL NOT LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' OR
-      NrDowoduOsobistego IS NOT NULL AND NrDowoduOsobistego NOT LIKE '[A-Z][A-Z][A-Z][0-9][0-9][0-9][0-9][0-9][0-9]')
-    RAISERROR('Niepoprawne dane!', 0, 1)
-
-  INSERT INTO Osoby
-  SELECT * FROM inserted
-  WHERE (PESEL IS NULL OR PESEL LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]') AND
-      (NrDowoduOsobistego IS NULL OR NrDowoduOsobistego LIKE '[A-Z][A-Z][A-Z][0-9][0-9][0-9][0-9][0-9][0-9]')
+  ALTER TABLE NałożoneKary DISABLE TRIGGER NałożoneKaryALL
+  DELETE FROM NałożoneKary
+  WHERE DataOpłacenia IS NOT NULL AND DATEDIFF(DAY, DataUkarania, GETDATE()) > 365
+  ALTER TABLE NałożoneKary ENABLE TRIGGER NałożoneKaryALL
 GO
-CREATE TRIGGER OsobyUPDATE
-ON Osoby
-AFTER UPDATE
+CREATE PROCEDURE ZmieńKary(
+  @proporcja DECIMAL)
 AS
-  IF EXISTS(
-    SELECT * FROM inserted
-    WHERE PESEL IS NOT NULL AND PESEL NOT LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' OR
-      NrDowoduOsobistego IS NOT NULL AND NrDowoduOsobistego NOT LIKE '[A-Z][A-Z][A-Z][0-9][0-9][0-9][0-9][0-9][0-9]')
-    RAISERROR('Niepoprawne dane!', 0, 1)
-
-  UPDATE 
-    Osoby
-  SET 
-    Imię = I.Imię,
-    Nazwisko = I.Nazwisko,
-    PESEL = I.PESEL,
-    NrDowoduOsobistego = I.NrDowoduOsobistego
-  FROM
-    Osoby O
-  INNER JOIN inserted I
-  ON O.OsobaID = I.OsobaID
-  WHERE (I.PESEL IS NULL OR I.PESEL LIKE '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]') AND
-      (I.NrDowoduOsobistego IS NULL OR I.NrDowoduOsobistego LIKE '[A-Z][A-Z][A-Z][0-9][0-9][0-9][0-9][0-9][0-9]') AND
-      O.OsobaID = I.OsobaID
+  IF @proporcja <= 0
+    RAISERROR('Niepoprawna proporcja!', 0, 1)
+    RETURN
+  UPDATE Przewinienia
+  SET
+    AktualnaKwotaKary = AktualnaKwotaKary * @proporcja
 GO
