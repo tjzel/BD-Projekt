@@ -75,7 +75,9 @@ AS
 
   SET @kwota = (SELECT * FROM KwotaKary(@daneOsobaID, @przewinienieID))
   
+  ALTER TABLE NałożoneKary DISABLE TRIGGER NałożoneKaryALL
   INSERT INTO NałożoneKary(KontrolerID, PrzewinienieID, UkaranyID, DataUkarania, KwotaKary, DataOpłacenia)
   VALUES(@kontrolerID, @przewinienieID, @daneOsobaID, GETDATE(), @kwota, NULL)
+  ALTER TABLE NałożoneKary ENABLE TRIGGER NałożoneKaryALL
 
 GO

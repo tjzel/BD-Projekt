@@ -14,7 +14,9 @@ AS
   IF @reszta < 0
     RAISERROR('Za mała kwota do opłacenia mandatu!', 0, 1)
     RETURN
+  ALTER TABLE NałożoneKary DISABLE TRIGGER NałożoneKaryALL
   UPDATE NałożoneKary
     SET DataOpłacenia = GETDATE()
     WHERE @mandatID = KaraID
+  ALTER TABLE NałożoneKary ENABLE TRIGGER NałożoneKaryALL
 GO
