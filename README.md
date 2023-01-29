@@ -27,7 +27,7 @@ Temat projektu: *Baza danych przedsiębiorstwa komunikacji miejskiej. Baza powin
 
 --------------------------------------
 
-## Tabele (10)
+## Tabele (20)
 * Osoby,
 * Stanowiska,
 * Pracownicy,
@@ -37,16 +37,33 @@ Temat projektu: *Baza danych przedsiębiorstwa komunikacji miejskiej. Baza powin
 * Bilety,
 * Progresja kar,
 * Przewinienia,
-* Nałożone kary
+* Nałożone kary,
+* Autobusy,
+* Czasy przejazdu,
+* Koszty eksploatacji,
+* Kursy,
+* Linie,
+* Modele autobusów,
+* Przystanki,
+* Trasy,
+* Usługi,
+* Wykonane kursy
 
-## Funkcje (2)
+## Funkcje (7)
 * Kwota kary,
-* Pracownicy na stanoiwsku
+* Pracownicy na stanowisku,
+* Addtime,
+* Harmonogram jazdy autobusu,
+* Harmonogram pracy kierowcy,
+* Rozkład jazdy dla kursu,
+* Rozkład jazdy dla przystanku
 
-## Widoki (3)
+
+## Widoki (4)
 * Przedawnione kary,
 * Kierowcy do wysłania na badania,
-* Miesięczny ranking kontrolerów
+* Miesięczny ranking kontrolerów,
+* Czasy trwania kursów
 
 ## Procedury (4)
 * Opłacenie mandatu,
