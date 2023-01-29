@@ -1,6 +1,6 @@
 CREATE TABLE Pracownicy(
   OsobaID INT NOT NULL,
-  PracownikID INT IDENTITY(1, 1),
+  PracownikID INT UNIQUE IDENTITY(1, 1),
   DataUrodzenia DATE NOT NULL,
   AdresZamieszkania NVARCHAR(256),
   NumerTelefonu NVARCHAR(9),

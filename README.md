@@ -48,5 +48,9 @@ Temat projektu: *Baza danych przedsiębiorstwa komunikacji miejskiej. Baza powin
 * Miesięczny ranking kontrolerów
 
 ## Procedury
+* Opłacenie mandatu,
+* Wystawienie mandatu
 
 ## Wyzwalacze
+* Osoby INSERT,
+* Osoby Update
