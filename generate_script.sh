@@ -1,6 +1,7 @@
 # !/bin/bash
 rm start_database.sql
 touch start_database.sql
+cat src/database.sql >> start_database.sql
 cat src/table_osoby.sql >> start_database.sql
 cat src/table_stanowiska.sql >> start_database.sql
 cat src/table_pracownicy.sql >> start_database.sql
