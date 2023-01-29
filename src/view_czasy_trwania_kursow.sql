@@ -1,10 +1,10 @@
-CREATE VIEW KomunikacjaMiejska.dbo.CzasyTrwaniaKursów
+CREATE VIEW CzasyTrwaniaKursów
 AS
-    SELECT K.KursID,K.GodzinaOdjazdu,T.PrzystanekOdjazdu,
-    (S.Czas+GodzinaOdjazdu) GodzinaPrzyjazdu, C.PrzystanekID PrzystanekPrzyjazdu,
+    SELECT K.KursID,K.GodzinaOdjazdu,T.PrzystanekPoczątkowy PrzystanekOdjazdu,
+    dbo.ADDTIME(S.Czas,GodzinaOdjazdu) GodzinaPrzyjazdu, C.PrzystanekID PrzystanekPrzyjazdu,
     K.DniPowszednie,K.Soboty,K.Niedziele,K.PracownikID,K.AutobusID
     FROM (SELECT Cz.TrasaID,
-        MAX(CzasPrzejZPoczątku) Czas, 
+        MAX(CzasPrzejZPoczątku) Czas 
         FROM CzasyPrzejazdu Cz
         GROUP BY(Cz.TrasaID)) S 
     JOIN CzasyPrzejazdu C ON S.Czas=C.CzasPrzejZPoczątku AND S.TrasaID=C.TrasaID

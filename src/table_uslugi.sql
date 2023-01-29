@@ -1,6 +1,6 @@
-CREATE TABLE Trasy(
-    NazwaUsługi INT
+CREATE TABLE Usługi(
+    NazwaUsługi NVARCHAR
 
     PRIMARY KEY(NazwaUsługi) 
-)
+);
 GO

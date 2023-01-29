@@ -1,4 +1,4 @@
-CREATE FUNCTION HarmonogramPracyKierowcy(@PracownikID,@DzienTyg)
+CREATE FUNCTION HarmonogramPracyKierowcy(@PracownikID INT,@DzienTyg INT)
 RETURNS @KursyKierowcy TABLE
 (
     GodzinaOdjazdu TIME,
@@ -18,4 +18,4 @@ AS
             (DniPowszednie=1 AND @DzienTyg NOT IN(6,7)))
         RETURN
     END
-    GO
+GO

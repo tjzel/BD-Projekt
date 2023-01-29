@@ -12,5 +12,5 @@ CREATE TABLE ModeleAutobusów(
 
 
     PRIMARY KEY(ModelID),
-)
+);
 GO

@@ -1,9 +1,9 @@
-CREATE FUNCTION RozkładJazdyDlaKursu ( @KursID )
+CREATE FUNCTION RozkładJazdyDlaKursu ( @KursID INT)
 RETURNS @RozkladTab TABLE(PrzystanekID NVARCHAR, Godzina Time)
 AS
 BEGIN
     INSERT INTO @RozkladTab
-        SELECT P.PrzystanekID, K.GodzinaOdjazdu+C.CzasPrzejZPoczątku
+        SELECT P.PrzystanekID, dbo.ADDTIME(K.GodzinaOdjazdu,C.CzasPrzejZPoczątku)
         FROM Przystanki P JOIN CzasyPrzejazdu C
         ON P.PrzystanekID=C.PrzystanekID
         JOIN Trasy T ON C.TrasaID=T.TrasaID 
@@ -13,9 +13,9 @@ BEGIN
     INSERT INTO @RozkladTab
         SELECT P.PrzystanekID, K.GodzinaOdjazdu Godzina
         FROM Przystanki P JOIN Trasy T
-        ON P.PrzystanekID=T.PrzystanekID
+        ON P.PrzystanekID=T.PrzystanekPoczątkowy
         JOIN Kursy K ON K.TrasaID=T.TrasaID
-        WHERE P.KursID=@KursID
+        WHERE K.KursID=@KursID
     RETURN
 END
 GO

@@ -7,5 +7,5 @@ CREATE TABLE KosztyEksploatacji(
     PRIMARY KEY(AutobusID,DataWykonania),
     FOREIGN KEY(AutobusID) REFERENCES Autobusy(AutobusID),
     FOREIGN KEY(NazwaUsługi) REFERENCES Usługi(NazwaUsługi) 
-)
+);
 GO

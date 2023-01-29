@@ -7,5 +7,5 @@ CREATE TABLE CzasyPrzejazdu(
     PRIMARY KEY(TrasaID,KolejnośćPrzystanku),
     FOREIGN KEY(PrzystanekID) REFERENCES Przystanki(PrzystanekID),
     FOREIGN KEY(TrasaID) REFERENCES Trasy(TrasaID) 
-)
+);
 GO

@@ -8,7 +8,6 @@ CREATE TABLE Przystanki(
     Strefa INT
 
     PRIMARY KEY(PrzystanekID),
-    FOREIGN KEY(StrefaID) REFERENCES Strefy(StrefaID),
-    FOREIGN KEY(PrzystanekPoczatkowy) REFERENCES Przystanki(PrzystanekID) 
-)
+    FOREIGN KEY(Strefa) REFERENCES Strefy(StrefaID) 
+);
 GO

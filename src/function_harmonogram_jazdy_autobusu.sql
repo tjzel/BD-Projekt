@@ -1,4 +1,4 @@
-CREATE FUNCTION HarmonogramJazdyAutobusu(@AutobusID,@DzienTyg)
+CREATE FUNCTION HarmonogramJazdyAutobusu(@AutobusID INT,@DzienTyg INT)
 RETURNS @KursyAutobusu TABLE
 (
     GodzinaOdjazdu TIME,
@@ -18,4 +18,4 @@ AS
             (DniPowszednie=1 AND @DzienTyg NOT IN(6,7)))
         RETURN
     END
-    GO
+GO

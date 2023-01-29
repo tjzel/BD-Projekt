@@ -1,4 +1,4 @@
-CREATE TABLE Trasy(
+CREATE TABLE WykonaneKursy(
     KursID INT,
     DataKursu DATE NOT NULL,
     PracownikID INT NOT NULL,
@@ -8,5 +8,5 @@ CREATE TABLE Trasy(
     FOREIGN KEY(KursID) REFERENCES Kursy(KursID),
     FOREIGN KEY(PracownikID) REFERENCES Kierowcy(PracownikID),
     FOREIGN KEY(AutobusID) REFERENCES Autobusy(AutobusID) 
-)
+);
 GO

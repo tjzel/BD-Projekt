@@ -12,5 +12,5 @@ CREATE TABLE Kursy(
     FOREIGN KEY(TrasaID) REFERENCES Trasy(TrasaID),
     FOREIGN KEY(AutobusID) REFERENCES Autobusy(AutobusID),
     FOREIGN KEY (PracownikID) REFERENCES Kierowcy(PracownikID) 
-)
+);
 GO

@@ -4,6 +4,6 @@ CREATE TABLE Linie(
     Nocna BIT,
     Przyspieszona BIT
 
-    PRIMARY KEY(Linia ID)
-)
+    PRIMARY KEY(LiniaID)
+);
 GO

@@ -9,5 +9,5 @@ CREATE TABLE Autobusy(
 
     PRIMARY KEY(AutobusID),
     FOREIGN KEY(ModelID) REFERENCES ModeleAutobusów(ModelID)
-)
+);
 GO
