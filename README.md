@@ -54,7 +54,7 @@ Temat projektu: *Baza danych przedsiębiorstwa komunikacji miejskiej. Baza powin
 * Aktualizacja mandatów,
 * Zmiana kwot kar
 
-## Wyzwalacze (4)
+## Wyzwalacze (3)
 * Osoby INSERT,
 * Osoby UPDATE,
 * NałożoneKary ALL
