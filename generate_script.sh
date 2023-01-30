@@ -36,6 +36,8 @@ cat src/function_harmonogram_pracy_kierowcy.sql >> start_database.sql
 cat src/trigger_table_osoby_insert.sql >> start_database.sql
 cat src/trigger_table_osoby_update.sql >> start_database.sql
 cat src/trigger_table_nalozone_kary_all.sql >> start_database.sql
+cat src/trigger_table_kursy_insert.sql >> start_database.sql
+cat src/trigger_table_kursy_update.sql >> start_database.sql
 ###
 cat src/function_kwota_kary.sql >> start_database.sql
 cat src/function_pracownicy_na_stanowisku.sql >> start_database.sql
@@ -44,3 +46,5 @@ cat src/procedure_wystaw_mandat.sql >> start_database.sql
 cat src/procedure_oplacenie_mandatu.sql >> start_database.sql
 cat src/procedure_aktualizacja_mandatow.sql >> start_database.sql
 cat src/procedure_zmien_kary.sql >> start_database.sql
+cat src/procedure_zastap_autobus.sql >> start_database.sql
+cat src/procedure_zastap_kierowce.sql >> start_database.sql
