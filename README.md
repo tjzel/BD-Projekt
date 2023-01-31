@@ -1,7 +1,4 @@
 # BD_Projekt
-Tutaj jeszcze nic nie ma, ale coś powstanie.
-[Arkusz google](https://docs.google.com/spreadsheets/d/1Jg0HyKWWY96D-6gPyGL3LQ-5d9hi8gJcSzA8RWQKls8/edit#gid=0).
-
 Temat projektu: *Baza danych przedsiębiorstwa komunikacji miejskiej. Baza powinna przechowywać informacje o kierowcach, liniach (jakie są przystanki), autobusach oraz rozkładzie jazdy.*
 
 ## Wymagania dotyczące bazy
