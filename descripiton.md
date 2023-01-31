@@ -108,6 +108,9 @@ Uniemożliwia zmianę godziny rozpoczęcia kursu ze względu na konieczność za
 * Jedyna możliwość ingerencji w tabelę *Nałożone kary* jest realizowana poprzez procedury *Wystaw mandat*, *Opłacenie mandatu* oraz *Aktualizacja mandatów* w związku z krytycznym charakterem danych zawartych w tej tabeli.
 * Tabele *Kierowcy* oraz *Kontrolerzy* dziedziczą z tabeli *Pracownicy*, a ta dziedziczy z tabeli *Osoby*. W każdej z tych tabel dodawany jest dla danej osoby dodatkowy numer identyfikacyjny. Służy to temu, aby móc przypisać pracownikom numery porządkowe dodatkowo związane z ich stanowiskiem. Ponadto, przykładowo zmiana stanowiska kierowcy nie wymusza usunięcia jego rekordów z tabel *Osoby* lub *Pracownicy*.
 
+# Strategia pielęgnacji bazy danych
+Baza danych zawiera informacje, które w większości nie są zmieniane szybko w czasie (przystanki, pracownicy, taryfy biletów), jednakże zawiera także dane o wykonanych kursach czy nałożonych (i opłaconych) mandatach - te ulegają zmieną wręcz nieustannie. W związku z tym, istotne jest wykonywanie regularnych kopii zapasowych. Cotygodniowe kopie zapasowe, wykonywane w niedziele, kiedy przedsiębiorstwo zdecydowanie korzysta z bazy danych najmniej oraz kiedy nie są rejestrowane przelewy bankowe powinny być w takiej sytuacji wystarczające.
+
 # Typowe zapytania
 Są realizowane przez procedury, funkcje oraz widoki.
 
